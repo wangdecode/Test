@@ -1,0 +1,32 @@
+﻿<html>
+<head>
+<meta charset="utf-8">
+<title>Video.js test</title>
+</head>
+
+<body>
+    <p align="center">
+        <video id="video_id" class="video-js" controls preload="auto" width="740" height="400"
+          poster="bg.png" data-setup="{}">
+        </video>
+    </p>
+</body>
+
+<!--
+     v5.20.5 , you can update to latest manually.
+     https://github.com/videojs/video.js/releases
+     https://github.com/videojs/videojs-contrib-hls/releases
+-->
+<link href="video-js.5.20.5.min.css" rel="stylesheet">
+<script src="video.5.20.5.min.js"></script>
+
+<script src="videojs-contrib-hls.min.js"></script>
+<script type="text/javascript">
+     var option={};
+     var videoObj = videojs('video_id',option,function onPlayerReady(){
+          var myPlayer = this;
+          myPlayer.src({src: "test.m3u8", type: "application/x-mpegURL"});
+          this.play();
+     });
+</script>
+</html>

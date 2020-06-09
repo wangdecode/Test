@@ -1,0 +1,55 @@
+﻿<html>
+<head>
+<meta charset="utf-8">
+<title>Video.js test</title>
+
+<style>
+    .logo {z-index:  1; position:absolute; top:0px; left:    0px}
+    .v1    {z-index: -1; position:absolute; top:0px; left:    0px}
+    .v2    {z-index: -1; position:absolute; top:0px; left:365px}
+</style>
+
+</head>
+
+<body>
+    <div class="logo">
+        <img src="logo.png"; style="position:absolute; left: 10px; top:20px; ">
+        <img src="logo.png"; style="position:absolute; left:370px; top:20px; ">
+    </div>
+    <div class="v1">
+        <video id="video_id1" class="video-js"  width="360" height="240" poster="bg.png">
+    </div>
+    <div class="v2">
+        <video id="video_id2" class="video-js" width="360" height="240" poster="bg.png">
+    </video>
+    </div>
+</body>
+
+<!-- v5.20.5 -->
+<link href="video-js.5.20.5.min.css" rel="stylesheet">
+<script src="video.5.20.5.min.js"></script>
+<script src="videojs-contrib-hls.min.js"></script>
+
+<script type="text/javascript">
+
+    var option={preload:'auto', muted : 'true', controls : 'false'};
+    var videoObj = videojs('video_id1',option,function onPlayerReady(){
+        var Player1 = this;
+        Player1.src({src: "test.m3u8", type: "application/x-mpegURL"});
+        Player1.play();
+    });
+
+    var option={preload:'auto', muted : 'true', controls : 'false'};
+    var videoObj = videojs('video_id2',option,function onPlayerReady(){
+        var Player2 = this;
+        Player2.src({src: "test2.m3u8", type: "application/x-mpegURL"});
+        Player2.play();
+/* 建议后面的视频加个延时
+        setTimeout(function() {
+            Player2.play();
+        }, 3000);
+*/
+    });
+
+</script>
+</html>
