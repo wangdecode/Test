@@ -1,0 +1,30 @@
+﻿{
+    "name": "dmzj",
+    "version": "1",
+    "manifest_version": 2,
+
+    "description": "dmzj添加订阅",
+    "icons": {
+        "16": "icon.png"
+    },
+
+    "browser_action": {
+        //"default_popup": "popup.html",
+        "default_title": "dmzj添加订阅",
+        "default_icon": "icon.png"
+    },
+
+    "web_accessible_resources" : ["main.js"],
+
+    "content_scripts": [{
+        "matches": ["http://manhua.dmzj.com/*/", "https://manhua.dmzj.com/*/"],
+        "js": ["test.js"],
+        "run_at": "document_end"
+    }],
+
+    "permissions": [
+        "tabs", 
+        "http://manhua.dmzj.com/",
+        "https://manhua.dmzj.com/"
+    ]
+}
