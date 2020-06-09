@@ -1,0 +1,90 @@
+<html>
+
+<!-- src: https://github.com/hexenq/kuroshiro -->
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>test</title></head>
+
+<body>
+
+<script src="kuromoji.js"></script>
+
+<script src="kuroshiro-analyzer-kuromoji.min.js"></script>
+<script src="kuroshiro.min.js"></script>
+
+<textarea style="font-size:20px" rows="5" cols="100" id="inpt" onchange="jp()"></textarea>
+<br/>
+
+<label> 模式：</label>
+<select id="mode" onchange="jp()" tabindex="1">
+	<option value="normal">标准模式</option>
+	<option value="spaced" selected="">空格分组</option>
+	<option value="okurigana">送假名</option>
+	<option value="furigana">注音假名</option>
+</select>
+
+<label> 转换为：</label>
+<select id="outp" onchange="f_to()" tabindex="2">
+	<option value="hiragana">平假名</option>
+	<option value="katakana">片假名</option>
+	<option value="romaji" selected="">罗马音</option>
+</select>
+
+<label id="r1"> 罗马音模式：</label>
+<select id="roma" onchange="jp()" tabindex="3">
+	<option value="nippon" selected="">日本式</option>
+	<option value="passport">护照式</option>
+	<option value="hepburn">平文式</option>
+</select>
+
+<button type="button" onclick="jp()">开始转换</button>
+
+<br/><br/>
+<label>结果：</label>
+<p style="font-size:20px; width:1000px" id="out"></p>
+<br/>
+
+<script type="text/javascript">
+
+document.getElementById("inpt").innerHTML="感じ取れたら手を繋ごう、重なるのは人生のライン and レミリア最高！";
+
+function f_to()
+{
+	var obj = document.getElementById("outp");
+	if(outp.value=="romaji")
+	{
+		document.getElementById("r1").style.display="inline";
+		document.getElementById("roma").style.display="inline";
+	}
+	else
+	{
+		document.getElementById("r1").style.display="none";
+		document.getElementById("roma").style.display="none";
+	}
+	jp();
+}
+
+function jp()
+{
+	var kuroshiro = new Kuroshiro();
+	
+	var _inpt=document.getElementById("inpt").value,
+		_mode=document.getElementById("mode").value,
+		_outp=document.getElementById("outp").value,
+		_roma=document.getElementById("roma").value;
+	
+	kuroshiro.init(new KuromojiAnalyzer({ dictPath: "dict/" }))
+		.then(function () {
+			return kuroshiro.convert(_inpt,
+			{ mode: _mode, to: _outp, romajiSystem: _roma});
+		})
+		.then(function(result){
+			//TODO
+			document.getElementById("out").innerHTML=result;
+	});
+	
+}
+
+</script>
+
+</body>
+</html>
