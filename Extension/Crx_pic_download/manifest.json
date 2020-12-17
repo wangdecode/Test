@@ -1,0 +1,35 @@
+﻿{
+    "name": "图片下载",
+    "version": "1.0",
+    "manifest_version": 2,
+
+    "description": "",
+    "icons": {
+        "16": "icon.png"
+    },
+
+    //"browser_action": {
+    "page_action": {
+        "default_popup": "popup.html",
+        "default_title": "",
+        "default_icon": "icon.png"
+    },
+    
+    "background": {
+        "scripts": ["background.js"]
+    },
+
+    "content_scripts": [{
+        "matches": ["https://*.*.com/*",
+                    "http://*.*.com/*"],
+        "js": ["content.js"],
+        "run_at": "document_start"
+    }],
+
+    "permissions": [
+        "webRequest",
+        "tabs",
+        "downloads",
+        "https://*.*.com/*", "http://*.*.com/*"
+    ]
+}
