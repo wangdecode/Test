@@ -20,6 +20,7 @@
 
     "permissions": [
         "webRequest", "webRequestBlocking",
-        "*://*.dmzj.com/"
+        "*://*.dmzj.com/",
+        "*://*.dmzj1.com/"
     ]
 }
