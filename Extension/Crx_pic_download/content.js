@@ -1,4 +1,5 @@
-chrome.runtime.sendMessage({"message": "activate_icon"});//发消息，激活popup
+//发消息，激活popup
+chrome.runtime.sendMessage({"message": "activate_icon"});
 
 //监听广播
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
@@ -19,7 +20,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 //图片解析
 function pic_explain() {
-    let pics = document.getElementById("images").getElementsByTagName("img");
+    let pics = document.getElementsByTagName("img");
     if (pics.length == 0) return;
     
     let pics_url = new Array();
