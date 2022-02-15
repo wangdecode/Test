@@ -1,4 +1,4 @@
-﻿{
+{
     "name": "图片下载",
     "version": "1.0",
     "manifest_version": 2,
@@ -20,8 +20,7 @@
     },
 
     "content_scripts": [{
-        "matches": ["https://*.*.com/*",
-                    "http://*.*.com/*"],
+        "matches": [ "http://*/*", "https://*/*" ],
         "js": ["content.js"],
         "run_at": "document_start"
     }],
@@ -30,6 +29,6 @@
         "webRequest",
         "tabs",
         "downloads",
-        "https://*.*.com/*", "http://*.*.com/*"
+        "http://*/*", "https://*/*"
     ]
 }
