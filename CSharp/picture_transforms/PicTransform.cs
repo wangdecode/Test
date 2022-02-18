@@ -47,6 +47,7 @@ namespace test
             Console.WriteLine("count: "+files.Length);
         }
         
+        //获取目录及子目录下的文件
         public static String[] GetFileList(String path)
         {
             List<string> fileList = new List<string>();
@@ -62,6 +63,7 @@ namespace test
             return fileList.ToArray();
         }
         
+        //输出用法
         public static void readme()
         {
             string info = "usage: [exe] path [ImageFormat] [quality]\n\n" +
@@ -71,26 +73,12 @@ namespace test
         }
     }
     
-    
+    //图片转换类
     class Picture
     {
         Bitmap image;
         
-        public void transformStream(String file,String ext="jpg",long quality=90)
-        {
-            String file_new;
-            String[] files;
-            
-            files = file.Split('.');
-            file_new = System.AppDomain.CurrentDomain.BaseDirectory +
-                files[0].Substring(files[0].LastIndexOf('\\')+1) + "." + ext;
-            
-            image = new Bitmap(file, true);
-            
-            
-            image.Dispose();
-        }
-        
+        //转换多个文件
         public void transforms(String[] files,String ext="jpg",long quality=90)
         {
             foreach(String file in files)
@@ -99,6 +87,7 @@ namespace test
             }
         }
         
+        //转换一个文件
         public void transform(String file,String ext="jpg",long quality=90)
         {
             String file_new;
@@ -107,8 +96,6 @@ namespace test
             files = file.Split('.');
             file_new = System.AppDomain.CurrentDomain.BaseDirectory +
                 files[0].Substring(files[0].LastIndexOf('\\')+1) + "." + ext;
-            
-            
             
             image = new Bitmap(file, true);
             
@@ -139,6 +126,7 @@ namespace test
             image.Dispose();
         }
         
+        //选择图片格式
         private ImageCodecInfo GetEncoder(ImageFormat format)  
         {  
             ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();  
