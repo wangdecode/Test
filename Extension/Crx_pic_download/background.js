@@ -1,4 +1,4 @@
-﻿//监听广播
+//监听广播
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         if (request.message === "activate_icon") {
@@ -18,7 +18,7 @@ function download(urls, path) {
     for (i=0;i<urls.length;i++) {
         let ext = urls[i].substr(urls[i].lastIndexOf('.'));
         if (ext.length < 4) ext = '.jpg';
-        let filename = path + String(i) + ext;
+        let filename = path + String(i+1) + ext;
         chrome.downloads.download({
             conflictAction: 'uniquify',
             method: "GET",
