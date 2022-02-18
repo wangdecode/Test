@@ -16,17 +16,18 @@ namespace test
                 return;
             }
             
-            String[] files = null;
             Picture pic = new Picture();
+            String[] files = null;
             files = GetFileList(args[0]);
+            int count = 0;
             
             switch (args.Length)
             {
                 case 1:
-                    pic.transforms(files);
+                    count = pic.transforms(files);
                     break;
                 case 2:
-                    pic.transforms(files, args[1].ToLower());
+                    count = pic.transforms(files, args[1].ToLower());
                     break;
                 case 3:
                     long quality;
@@ -37,14 +38,14 @@ namespace test
                         Console.WriteLine(e);
                         return;
                     }
-                    pic.transforms(files, args[1].ToLower(), quality);
+                    count = pic.transforms(files, args[1].ToLower(), quality);
                     break;
                 default:
                     readme();
                     return;
             }
             
-            Console.WriteLine("count: "+files.Length);
+            Console.WriteLine("Success: "+count.ToString()+"\nError: "+(files.Length-count).ToString());
         }
         
         //获取目录及子目录下的文件
@@ -77,18 +78,21 @@ namespace test
     class Picture
     {
         Bitmap image;
+        int SuccessCount;
         
         //转换多个文件
-        public void transforms(String[] files,String ext="jpg",long quality=90)
+        public int transforms(String[] files,String ext="jpg",long quality=90)
         {
+            SuccessCount = 0;
             foreach(String file in files)
             {
                 transform(file, ext , quality);
             }
+            return SuccessCount;
         }
         
         //转换一个文件
-        public void transform(String file,String ext="jpg",long quality=90)
+        private void transform(String file,String ext="jpg",long quality=90)
         {
             String file_new;
             String[] files;
@@ -97,7 +101,14 @@ namespace test
             file_new = System.AppDomain.CurrentDomain.BaseDirectory +
                 files[0].Substring(files[0].LastIndexOf('\\')+1) + "." + ext;
             
-            image = new Bitmap(file, true);
+            try
+            {
+                image = new Bitmap(file, true);
+            } catch (System.ArgumentException e)
+            {
+                Console.WriteLine(file + "\n" + e);
+                return;
+            }
             
             switch(ext)
             {
@@ -124,6 +135,7 @@ namespace test
             }
             
             image.Dispose();
+            SuccessCount++;
         }
         
         //选择图片格式
