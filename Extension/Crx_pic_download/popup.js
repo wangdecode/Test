@@ -1,11 +1,22 @@
 //popup.html 按钮事件
 document.addEventListener('DOMContentLoaded', function() {
     let obj;
+    
     obj = document.getElementById('btn_start');
     obj.addEventListener('click', function() {
         start(document.getElementById('path').value);
     });
-    
+ 
+    obj = document.getElementById('btn_path');
+    obj.addEventListener('click', function() {
+        pathchange();
+    });
+ 
+    obj = document.getElementById('btn_clean');
+    obj.addEventListener('click', function() {
+        sendToContent({cmd:'pic_remove_space'});
+    });
+ 
     obj = document.getElementById('path');
     obj.addEventListener('change', function() {
         let bg = chrome.extension.getBackgroundPage();
@@ -33,7 +44,6 @@ function sendToContent(message) {
 
 //开始下载
 function start(path) {
-    pathchange(path);
     if (path[path.length-1] != "\\")
         path = path + "\\";
     
@@ -50,17 +60,18 @@ function init() {
     sendToContent({cmd:'getnum'});
 }
 
-//路径自动更新
-function pathchange(path) {
-    let pnum, num, spath;
+//路径更新
+function pathchange() {
+    let path, pnum, spath;
+    path =  document.getElementById('path').value
     pnum = path.match(/[0-9]*$/);
-    if(pnum[0].length == 0)
+    if(pnum[0].length == 0) {
         spath =  path + '1';
-    else
-    {
-        num = parseInt(pnum[0]) + 1;
-        spath = path.substr(0, pnum.index) + String(num);
+    } else {
+        spath = path.substr(0, pnum.index) + String(parseInt(pnum[0]) + 1);
     }
     let bg = chrome.extension.getBackgroundPage();
     bg.setpath(spath);
+    
+    document.getElementById('path').value = spath;
 }
