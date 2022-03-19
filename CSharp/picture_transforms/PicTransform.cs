@@ -10,24 +10,14 @@ namespace test
     {
         static void Main(string[] args)
         {
-            if (args.Length == 0)
-            {
-                readme();
-                return;
-            }
-            
             Picture pic = new Picture();
-            String[] files = null;
-            files = GetFileList(args[0]);
-            int count = 0;
-            
             switch (args.Length)
             {
                 case 1:
-                    count = pic.transforms(files);
+                    pic.transforms(args[0]);
                     break;
                 case 2:
-                    count = pic.transforms(files, args[1].ToLower());
+                    pic.transforms(args[0], args[1].ToLower());
                     break;
                 case 3:
                     long quality;
@@ -38,18 +28,29 @@ namespace test
                         Console.WriteLine(e);
                         return;
                     }
-                    count = pic.transforms(files, args[1].ToLower(), quality);
+                    pic.transforms(args[0], args[1].ToLower(), quality);
                     break;
                 default:
                     readme();
                     return;
             }
-            
-            Console.WriteLine("Success: "+count.ToString()+"\nError: "+(files.Length-count).ToString());
         }
         
+        //输出用法
+        public static void readme()
+        {
+            string info = "usage: [exe] path [ImageFormat] [quality]\n\n" +
+                "ImageFormat (default=jpg):\njpg、png、bmp、tiff、gif\n\n" +
+                "quality (default=90, jpg only):\n0-100\n";
+            Console.WriteLine(info);
+        }
+    }
+    
+    //文件类
+    class FileClass
+    {
         //获取目录及子目录下的文件
-        public static String[] GetFileList(String path)
+        public static string[] GetFileList(string path)
         {
             List<string> fileList = new List<string>();
             
@@ -64,13 +65,14 @@ namespace test
             return fileList.ToArray();
         }
         
-        //输出用法
-        public static void readme()
+        //获取新的目录名称
+        public static string GetNewDirectorie(string path)
         {
-            string info = "usage: [exe] path [ImageFormat] [quality]\n\n" +
-                "ImageFormat (default=jpg):\njpg、png、bmp、tiff、gif\n\n" +
-                "quality (default=90, jpg only):\n0-100\n";
-            Console.WriteLine(info);
+            string p = "";
+            p = path.Replace("\"","")+"_1\\";
+            DirectoryInfo dir = new DirectoryInfo(p);
+            dir.Create();
+            return p;
         }
     }
     
@@ -79,27 +81,38 @@ namespace test
     {
         Bitmap image;
         int SuccessCount;
+        int ErrorCount;
+        string NewPath = "";
         
         //转换多个文件
-        public int transforms(String[] files,String ext="jpg",long quality=90)
+        public void transforms(string path,string ext="jpg",long quality=90)
         {
+            string[] files = null;
+            
             SuccessCount = 0;
-            foreach(String file in files)
+            ErrorCount = 0;
+            files = FileClass.GetFileList(path);
+            
+            if(files.Length == 0) return;
+            NewPath = FileClass.GetNewDirectorie(path);
+            
+            foreach(string file in files)
             {
                 transform(file, ext , quality);
             }
-            return SuccessCount;
+            
+            ErrorCount = files.Length - SuccessCount;
+            result();
         }
         
         //转换一个文件
-        private void transform(String file,String ext="jpg",long quality=90)
+        private void transform(string file, string ext="jpg", long quality=90)
         {
-            String file_new;
-            String[] files;
+            string file_new;
+            string[] files;
             
             files = file.Split('.');
-            file_new = System.AppDomain.CurrentDomain.BaseDirectory +
-                files[0].Substring(files[0].LastIndexOf('\\')+1) + "." + ext;
+            file_new = NewPath + files[0].Substring(files[0].LastIndexOf('\\')+1) + "." + ext;
             
             try
             {
@@ -139,17 +152,20 @@ namespace test
         }
         
         //选择图片格式
-        private ImageCodecInfo GetEncoder(ImageFormat format)  
-        {  
-            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();  
+        private ImageCodecInfo GetEncoder(ImageFormat format)
+        {
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
             foreach (ImageCodecInfo codec in codecs)  
-            {  
-                if (codec.FormatID == format.Guid)  
-                {  
-                    return codec;  
-                }  
-            }  
-            return null;  
+            {
+                if (codec.FormatID == format.Guid) return codec;  
+            }
+            return null;
+        }
+        
+        //输出结果
+        private void result()
+        {
+            Console.WriteLine("Success: "+SuccessCount.ToString()+"\nError: "+ErrorCount.ToString());
         }
     }
 }
