@@ -16,24 +16,36 @@ namespace CaptureScreen
         }
     }
     
+    // 截图类
     class Capture
     {
-        int ScreenX=0;
-        int ScreenY=0;
+        int ScreenW=0;
+        int ScreenH=0;
         ImageCodecInfo myImageCodecInfo;
+        
+        [DllImport("gdi32.dll", EntryPoint = "GetDeviceCaps", SetLastError = true)]
+        public static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
         
         public Capture()
         {
-            ScreenX = Screen.PrimaryScreen.Bounds.Width;
-            ScreenY = Screen.PrimaryScreen.Bounds.Height;
+            //ScreenW = Screen.PrimaryScreen.Bounds.Width;
+            //ScreenH = Screen.PrimaryScreen.Bounds.Height;
+            using (Graphics g = Graphics.FromHwnd(IntPtr.Zero))
+            {
+                IntPtr desktop = g.GetHdc();
+                ScreenH = GetDeviceCaps(desktop, 117);
+                ScreenW = GetDeviceCaps(desktop, 118);
+            }
+            
             myImageCodecInfo = GetEncoderInfo("image/jpeg");
-            //Console.WriteLine("w="+ScreenX.ToString()+",h="+ScreenY.ToString());
+            //Console.WriteLine("w="+ScreenW.ToString()+",h="+ScreenH.ToString());
         }
         
+        // 截图方法
         public void capture()
         {
-            int w = ScreenX;
-            int h = ScreenY;
+            int w = ScreenW;
+            int h = ScreenH;
             string FileName = GetFileName();
             
             Bitmap bitmap = new Bitmap(w, h);
@@ -56,6 +68,7 @@ namespace CaptureScreen
             }
         }
         
+        // 判断系统是否支持图片格式，不支持返回null
         private static ImageCodecInfo GetEncoderInfo(String mimeType)
         {
             int j;
@@ -69,9 +82,10 @@ namespace CaptureScreen
             return null;
         }
         
+        // 按时间生成文件名
         private string GetFileName()
         {
-            string ext=".jpg";
+            string ext = ".jpg";
             string nowdate = DateTime.Now.ToString("yyyy.MM.dd_hhmmss");
             string name = nowdate + ext;
             
@@ -87,6 +101,7 @@ namespace CaptureScreen
         }
     }
     
+    // 热键类
     public class HotKey
     {
         [DllImport("user32.dll", SetLastError = true)]
@@ -98,24 +113,27 @@ namespace CaptureScreen
         [Flags()]
         public enum KeyModifiers { None = 0, Alt = 1, Ctrl = 2, Shift = 4, WindowsKey = 8 }
         
+        // 注册热键
         public static void RegHotKey(IntPtr hwnd, int hotKeyId, KeyModifiers keyModifiers, Keys key)
         {
             if (!RegisterHotKey(hwnd, hotKeyId, keyModifiers, key))
             {
                 int errorCode = Marshal.GetLastWin32Error();
                 if (errorCode == 1409)
-                    Console.WriteLine("�ȼ���ռ��!");
+                    Console.WriteLine("热键被占用!");
                 else
-                    Console.WriteLine("ע���ȼ�ʧ�ܣ�������룺" + errorCode.ToString());
+                    Console.WriteLine("注册热键失败！错误代码：" + errorCode.ToString());
             }
         }
         
+        // 取消热键
         public static void UnRegHotKey(IntPtr hwnd, int hotKeyId)
         {
             UnregisterHotKey(hwnd, hotKeyId);
         }
     }
     
+    // 窗口类
     public partial class Form1 : Form
     {
         public Form1()  
@@ -127,7 +145,7 @@ namespace CaptureScreen
         
         private void Form1_Load(object sender, EventArgs e)
         {
-            //ע���ȼ�F2��Id��Ϊ100
+            //注册热键F2，Id号为100
             HotKey.RegHotKey(Handle, 100, HotKey.KeyModifiers.None, Keys.F2);
             HotKey.RegHotKey(Handle, 101, HotKey.KeyModifiers.None, Keys.F3);
             Console.WriteLine("reg F2:capture\nreg F3:exit");
