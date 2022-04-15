@@ -65,14 +65,15 @@ namespace test
             return fileList.ToArray();
         }
         
-        //获取新的目录名称
-        public static string GetNewDirectorie(string path)
+        //判断目录是否为空，为空返回true
+        public static bool IsDirectoryEmpty(string path)
         {
-            string p = "";
-            p = path.Replace("\"","")+"_1\\";
-            DirectoryInfo dir = new DirectoryInfo(p);
-            dir.Create();
-            return p;
+            if (Directory.Exists(path) == false)
+                return true;
+            if (Directory.GetDirectories(path).Length > 0 || Directory.GetFiles(path).Length > 0)
+                return false;
+            else
+                return true;
         }
     }
     
@@ -82,7 +83,7 @@ namespace test
         Bitmap image;
         int SuccessCount;
         int ErrorCount;
-        string NewPath = "";
+        string FilePath = "";
         
         //转换多个文件
         public void transforms(string path,string ext="jpg",long quality=90)
@@ -91,11 +92,19 @@ namespace test
             
             SuccessCount = 0;
             ErrorCount = 0;
-            files = FileClass.GetFileList(path);
+            FilePath = path.Replace("\"","") + "\\";
+            string NewPath = path.Replace("\"","")+"_1\\";
             
-            if(files.Length == 0) return;
-            NewPath = FileClass.GetNewDirectorie(path);
+            if(FileClass.IsDirectoryEmpty(path) || Directory.Exists(NewPath)) return;
             
+            //原文件夹改名
+            Directory.Move(path, NewPath);
+            
+            //创建新的目录
+            DirectoryInfo dir = new DirectoryInfo(FilePath);
+            dir.Create();
+            
+            files = FileClass.GetFileList(NewPath);
             foreach(string file in files)
             {
                 transform(file, ext , quality);
@@ -112,7 +121,7 @@ namespace test
             string[] files;
             
             files = file.Split('.');
-            file_new = NewPath + files[0].Substring(files[0].LastIndexOf('\\')+1) + "." + ext;
+            file_new = FilePath + files[0].Substring(files[0].LastIndexOf('\\')+1) + "." + ext;
             
             try
             {
