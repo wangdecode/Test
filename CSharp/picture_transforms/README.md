@@ -1,7 +1,7 @@
 这是一个用C#编写的简易图片转换程序，调用系统自带图片解析库。<br>
-
-编译方法
-Debug:   csc.exe -debug [file]
+<br>
+编译方法<br>
+Debug:   csc.exe -debug [file]<br>
 Release: csc.exe [file]
 
 用法
