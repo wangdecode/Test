@@ -2,18 +2,19 @@
 <br>
 编译方法<br>
 Debug:   csc.exe -debug [file]<br>
-Release: csc.exe [file]
-
-用法
-把文件夹拖到程序上
-
-usage: [exe] path [ReSizeWidth] [ImageFormat] [quality]
-
-ReSizeWidth (default=0):
-only resize image while Width > 0
-
-ImageFormat (default=jpg):
-jpg、png、bmp、tiff、gif
-
-quality (default=90, jpg only):
-0-100
+Release: csc.exe [file]<br>
+<br>
+用法<br>
+把文件夹拖到程序上<br>
+<br>
+usage: [exe] path [ReSizeWidth] [ImageFormat] [quality]<br>
+<br>
+ReSizeWidth (default=0):<br>
+only resize image while Width > 0<br>
+<br>
+ImageFormat (default=jpg):<br>
+jpg、png、bmp、tiff、gif<br>
+<br>
+quality (default=90, jpg only):<br>
+0-100<br>
+<br>
