@@ -10,38 +10,46 @@ namespace test
     {
         static void Main(string[] args)
         {
-            Picture pic = new Picture();
-            switch (args.Length)
+            string path="", ext="jpg";
+            long quality = 90;
+            int width = 0;
+            
+            int argsl = args.Length;
+            if(argsl == 0 || argsl > 4) {readme();return;}
+            if(argsl >= 1) path = args[0];
+            if(argsl >= 2)
             {
-                case 1:
-                    pic.transforms(args[0]);
-                    break;
-                case 2:
-                    pic.transforms(args[0], args[1].ToLower());
-                    break;
-                case 3:
-                    long quality;
-                    try
-                    {
-                        quality = long.Parse(args[2]);
-                    } catch(System.FormatException e) {
-                        Console.WriteLine(e);
-                        return;
-                    }
-                    pic.transforms(args[0], args[1].ToLower(), quality);
-                    break;
-                default:
-                    readme();
+                try
+                {
+                    width = int.Parse(args[1]);
+                } catch(System.FormatException e) {
+                    Console.WriteLine(e);
                     return;
+                }
             }
+            if(argsl >= 3) ext = args[2].ToLower();
+            if(argsl >= 4)
+            {
+                try
+                {
+                    quality = long.Parse(args[3]);
+                } catch(System.FormatException e) {
+                    Console.WriteLine(e);
+                    return;
+                }
+            }
+            
+            Picture pic = new Picture();
+            pic.transforms(path, width, ext, quality);
         }
         
         //输出用法
         public static void readme()
         {
-            string info = "usage: [exe] path [ImageFormat] [quality]\n\n" +
-                "ImageFormat (default=jpg):\njpg、png、bmp、tiff、gif\n\n" +
-                "quality (default=90, jpg only):\n0-100\n";
+            string info = "usage: [exe] path [ReSizeWidth] [ImageFormat] [quality]\n\n" +
+                "ReSizeWidth (default=0):\tonly resize image while Width > 0\n\n" +
+                "ImageFormat (default=jpg):\tjpg、png、bmp、tiff、gif\n\n" +
+                "quality (default=90, jpg use):\t0-100\n";
             Console.WriteLine(info);
         }
     }
@@ -86,7 +94,7 @@ namespace test
         string FilePath = "";
         
         //转换多个文件
-        public void transforms(string path,string ext="jpg",long quality=90)
+        public void transforms(string path, int width, string ext, long quality)
         {
             string[] files = null;
             
@@ -96,10 +104,10 @@ namespace test
             string NewPath = path.Replace("\"","")+"_1\\";
             
             if(FileClass.IsDirectoryEmpty(path) || Directory.Exists(NewPath)) return;
+            Console.WriteLine(path);
             
             //原文件夹改名
             Directory.Move(path, NewPath);
-            
             //创建新的目录
             DirectoryInfo dir = new DirectoryInfo(FilePath);
             dir.Create();
@@ -107,7 +115,7 @@ namespace test
             files = FileClass.GetFileList(NewPath);
             foreach(string file in files)
             {
-                transform(file, ext , quality);
+                transform(file, width, ext , quality);
             }
             
             ErrorCount = files.Length - SuccessCount;
@@ -115,17 +123,17 @@ namespace test
         }
         
         //转换一个文件
-        private void transform(string file, string ext="jpg", long quality=90)
+        private void transform(string file, int width, string ext, long quality)
         {
             string file_new;
-            string[] files;
+            int strp = file.LastIndexOf('\\') + 1;
+            int strl = file.LastIndexOf('.') - strp;
             
-            files = file.Split('.');
-            file_new = FilePath + files[0].Substring(files[0].LastIndexOf('\\')+1) + "." + ext;
+            file_new = FilePath + file.Substring(strp, strl) + "." + ext;
             
             try
             {
-                image = new Bitmap(file, true);
+                image = ReSize(file, width);
             } catch (System.ArgumentException e)
             {
                 Console.WriteLine(file + "\n" + e);
@@ -171,10 +179,24 @@ namespace test
             return null;
         }
         
+        //图片缩放，按宽等比缩放
+        private Bitmap ReSize(string file, int w)
+        {
+            Bitmap img = new Bitmap(file, true);
+            if( w == 0 || img.Width <= w) return img;
+            
+            int h = (int)((double)img.Height / img.Width * w);
+            Bitmap newimg = new Bitmap(img, w, h);
+            
+            img.Dispose();
+            
+            return newimg;
+        }
+        
         //输出结果
         private void result()
         {
-            Console.WriteLine("Success: "+SuccessCount.ToString()+"\nError: "+ErrorCount.ToString());
+            Console.WriteLine("Success: "+SuccessCount.ToString()+"\tError: "+ErrorCount.ToString());
         }
     }
 }
