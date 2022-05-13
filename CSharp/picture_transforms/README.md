@@ -5,9 +5,10 @@ Debug:   csc.exe -debug [file]<br>
 Release: csc.exe [file]<br>
 <br>
 用法<br>
-把文件夹拖到程序上<br>
+把一个或多个文件夹拖到程序上<br>
+可以手动添加一个同名的配置文件(.ini)，在配置文件中修改配置<br>
 <br>
-usage: [exe] path [ReSizeWidth] [ImageFormat] [quality]<br>
+usage: [exe] paths <br>
 <br>
 ReSizeWidth (default=0):<br>
 only resize image while Width > 0<br>
