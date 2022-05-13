@@ -10,12 +10,11 @@ Release: csc.exe [file]<br>
 <br>
 usage: [exe] paths <br>
 <br>
-ReSizeWidth (default=0):<br>
-only resize image while Width > 0<br>
-<br>
-ImageFormat (default=jpg):<br>
-jpg、png、bmp、tiff、gif<br>
-<br>
-quality (default=90, jpg only):<br>
-0-100<br>
-<br>
+ReSizeWidth (default=0): only resize image while Width > 0<br><br>
+ImageFormat (default=jpg): jpg、png、bmp、tiff、gif<br><br>
+JpgQuality (default=90, jpg only): 0-100<br>
+<br><br>
+Sample ini:<br>
+ReSizeWidth = 0<br>
+ImageFormat = jpg<br>
+JpgQuality  = 90<br>
