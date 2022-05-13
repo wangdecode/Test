@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Text.RegularExpressions;
 using System.Collections.Generic;
 
 namespace test
@@ -10,46 +11,26 @@ namespace test
     {
         static void Main(string[] args)
         {
-            string path="", ext="jpg";
-            long quality = 90;
-            int width = 0;
-            
-            int argsl = args.Length;
-            if(argsl == 0 || argsl > 4) {readme();return;}
-            if(argsl >= 1) path = args[0];
-            if(argsl >= 2)
-            {
-                try
-                {
-                    width = int.Parse(args[1]);
-                } catch(System.FormatException e) {
-                    Console.WriteLine(e);
-                    return;
-                }
-            }
-            if(argsl >= 3) ext = args[2].ToLower();
-            if(argsl >= 4)
-            {
-                try
-                {
-                    quality = long.Parse(args[3]);
-                } catch(System.FormatException e) {
-                    Console.WriteLine(e);
-                    return;
-                }
-            }
-            
+
+            int argc = args.Length;
+            if(argc == 0) {readme();return;}
+
             Picture pic = new Picture();
-            pic.transforms(path, width, ext, quality);
+            
+            for(int i=0; i < argc ; i++)
+                pic.transforms(args[i]);
+            
+            Console.WriteLine("finish.");
+            Console.Read();
         }
         
         //输出用法
         public static void readme()
         {
-            string info = "usage: [exe] path [ReSizeWidth] [ImageFormat] [quality]\n\n" +
-                "ReSizeWidth (default=0):\tonly resize image while Width > 0\n\n" +
-                "ImageFormat (default=jpg):\tjpg、png、bmp、tiff、gif\n\n" +
-                "quality (default=90, jpg use):\t0-100\n";
+            string info = "usage: [exe] path\n\n" +
+                "ReSizeWidth (default=0)  : only resize image while Width > 0\n" +
+                "ImageFormat (default=jpg): jpg、png、bmp、tiff、gif\n" +
+                "JpgQuality  (default=90) : 0-100\n";
             Console.WriteLine(info);
         }
     }
@@ -83,18 +64,75 @@ namespace test
             else
                 return true;
         }
+
     }
     
     //图片转换类
     class Picture
-    {
+    {  
         Bitmap image;
         int SuccessCount;
         int ErrorCount;
         string FilePath = "";
         
+        string ext="jpg";
+        long quality = 90;
+        int width = 0;
+        
+        public Picture()
+        {
+            ReadIni();
+            Console.WriteLine("ReSizeWidth = " + width.ToString());
+            Console.WriteLine("ImageFormat = " + ext);
+            Console.WriteLine("JpgQuality  = " + quality.ToString() + "\n");
+        }
+        
+        //读取配置文件
+        public void ReadIni()
+        {
+            string file = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+            file = file.Substring(0,file.LastIndexOf('.') + 1) + "ini";
+            
+            FileInfo fileinfo = new FileInfo(file);
+            if (!fileinfo.Exists || fileinfo.Length > 4096) return;
+            
+            string str = null;
+            using (StreamReader sr = new StreamReader(file))
+            {
+                str = sr.ReadToEnd();
+            }
+            
+            string tmp;
+            
+            try
+            {
+                tmp = ReadOption(str, "ReSizeWidth");
+                if(tmp.Length > 0) width = int.Parse(tmp);
+
+                tmp = ReadOption(str, "ImageFormat");
+                if(tmp.Length > 0) ext = tmp.ToLower();
+
+                tmp = ReadOption(str, "JpgQuality");
+                if(tmp.Length > 0) quality = long.Parse(tmp);
+            } catch(System.FormatException e) {
+                Console.WriteLine(e);
+            }
+        }
+        
+        private string ReadOption(string str, string option)
+        {
+            string pattern;
+            Regex rgx;
+            
+            pattern = "(?<=" + option +"\\s*=\\s*)[^\\s]+";
+            rgx = new Regex(pattern, RegexOptions.IgnoreCase);
+            string m = rgx.Match(str).Groups[0].ToString();
+            
+            return m;
+        }
+        
         //转换多个文件
-        public void transforms(string path, int width, string ext, long quality)
+        public void transforms(string path)
         {
             string[] files = null;
             
@@ -104,7 +142,6 @@ namespace test
             string NewPath = path.Replace("\"","")+"_1\\";
             
             if(FileClass.IsDirectoryEmpty(path) || Directory.Exists(NewPath)) return;
-            Console.WriteLine(path);
             
             //原文件夹改名
             Directory.Move(path, NewPath);
@@ -115,15 +152,17 @@ namespace test
             files = FileClass.GetFileList(NewPath);
             foreach(string file in files)
             {
-                transform(file, width, ext , quality);
+                transform(file);
             }
             
             ErrorCount = files.Length - SuccessCount;
+            
+            Console.WriteLine(path);
             result();
         }
         
         //转换一个文件
-        private void transform(string file, int width, string ext, long quality)
+        private void transform(string file)
         {
             string file_new;
             int strp = file.LastIndexOf('\\') + 1;
@@ -189,14 +228,15 @@ namespace test
             Bitmap newimg = new Bitmap(img, w, h);
             
             img.Dispose();
-            
             return newimg;
         }
         
         //输出结果
         private void result()
         {
-            Console.WriteLine("Success: "+SuccessCount.ToString()+"\tError: "+ErrorCount.ToString());
+            Console.WriteLine(
+                "Success: "+SuccessCount.ToString() +
+                "\tError: "+ErrorCount.ToString());
         }
     }
 }
