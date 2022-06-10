@@ -11,27 +11,29 @@ namespace test
     {
         static void Main(string[] args)
         {
-
             int argc = args.Length;
-            if(argc == 0) {readme();return;}
-
-            Picture pic = new Picture();
             
+            if(argc == 0)
+            {
+                //输出用法
+                string info = "usage: [exe] path\n\n" +
+                "ReSizeWidth : only resize image while Width > 0\n" +
+                "ImageFormat : jpg、png、bmp、tiff、gif\n" +
+                "JpgQuality  : 0-100\n" +
+                "IsNewFile   : if true will make a new folder\n";
+                Console.WriteLine(info);
+                return;
+            }
+            
+            Picture pic = new Picture();
             for(int i=0; i < argc ; i++)
+            {
+                Console.WriteLine(args[i]);
                 pic.transforms(args[i]);
+            }
             
             Console.WriteLine("finish.");
             Console.Read();
-        }
-        
-        //输出用法
-        public static void readme()
-        {
-            string info = "usage: [exe] path\n\n" +
-                "ReSizeWidth (default=0)  : only resize image while Width > 0\n" +
-                "ImageFormat (default=jpg): jpg、png、bmp、tiff、gif\n" +
-                "JpgQuality  (default=90) : 0-100\n";
-            Console.WriteLine(info);
         }
     }
     
@@ -69,22 +71,27 @@ namespace test
     
     //图片转换类
     class Picture
-    {  
-        Bitmap image;
+    {
         int SuccessCount;
         int ErrorCount;
-        string FilePath = "";
         
         string ext="jpg";
         long quality = 90;
         int width = 0;
+        bool IsNewFile = false;
         
         public Picture()
         {
             ReadIni();
+            PrintIni();
+        }
+        
+        public void PrintIni()
+        {
             Console.WriteLine("ReSizeWidth = " + width.ToString());
             Console.WriteLine("ImageFormat = " + ext);
-            Console.WriteLine("JpgQuality  = " + quality.ToString() + "\n");
+            Console.WriteLine("JpgQuality  = " + quality.ToString());
+            Console.WriteLine("IsNewFile   = " + IsNewFile.ToString() + "\n");
         }
         
         //读取配置文件
@@ -114,6 +121,10 @@ namespace test
 
                 tmp = ReadOption(str, "JpgQuality");
                 if(tmp.Length > 0) quality = long.Parse(tmp);
+                
+                tmp = ReadOption(str, "IsNewFile");
+                if(tmp.Length > 0)  IsNewFile = bool.Parse(tmp);
+                
             } catch(System.FormatException e) {
                 Console.WriteLine(e);
             }
@@ -135,47 +146,58 @@ namespace test
         public void transforms(string path)
         {
             string[] files = null;
+            string FilePath = path.Replace("\"","") + "\\";
+            string NewPath;
             
             SuccessCount = 0;
             ErrorCount = 0;
-            FilePath = path.Replace("\"","") + "\\";
-            string NewPath = path.Replace("\"","")+"_1\\";
             
-            if(FileClass.IsDirectoryEmpty(path) || Directory.Exists(NewPath)) return;
+            if(FileClass.IsDirectoryEmpty(path)) return;
             
-            //原文件夹改名
-            Directory.Move(path, NewPath);
-            //创建新的目录
-            DirectoryInfo dir = new DirectoryInfo(FilePath);
-            dir.Create();
-            
-            files = FileClass.GetFileList(NewPath);
-            foreach(string file in files)
+            //当 IsNewFile 为 false 时覆盖原文件
+            if(IsNewFile)
             {
-                transform(file);
+                NewPath = path.Replace("\"","")+"_1\\";
+                if(Directory.Exists(NewPath)) return;
+                //原文件夹改名
+                Directory.Move(path, NewPath);
+                //创建新的目录
+                DirectoryInfo dir = new DirectoryInfo(FilePath);
+                dir.Create();
+            } else {
+                NewPath = FilePath;
             }
             
+            ProgressBar pbar = new ProgressBar();
+            files = FileClass.GetFileList(NewPath);
+            for(int i=0; i<files.Length; i++)
+            {
+                string file_new;
+                int strp = files[i].LastIndexOf('\\') + 1;
+                int strl = files[i].LastIndexOf('.') - strp;
+                file_new = FilePath + files[i].Substring(strp, strl) + "." + ext;
+                transform(files[i], file_new);
+                
+                pbar.Dispaly(Convert.ToInt32((i+1.0)/files.Length*100));
+            }
             ErrorCount = files.Length - SuccessCount;
             
-            Console.WriteLine(path);
-            result();
+            //输出结果
+            Console.WriteLine(
+                "\nSuccess: "+SuccessCount.ToString() +
+                "\tError: "+ErrorCount.ToString());
         }
         
         //转换一个文件
-        private void transform(string file)
+        private void transform(string file_old, string file_new)
         {
-            string file_new;
-            int strp = file.LastIndexOf('\\') + 1;
-            int strl = file.LastIndexOf('.') - strp;
-            
-            file_new = FilePath + file.Substring(strp, strl) + "." + ext;
-            
+            Bitmap image;
             try
             {
-                image = ReSize(file, width);
+                image = ReSize(file_old, width);
             } catch (System.ArgumentException e)
             {
-                Console.WriteLine(file + "\n" + e);
+                Console.WriteLine(file_old + "\n" + e);
                 return;
             }
             
@@ -202,7 +224,6 @@ namespace test
                     image.Save(file_new, ImageFormat.Gif);
                     break;
             }
-            
             image.Dispose();
             SuccessCount++;
         }
@@ -222,21 +243,17 @@ namespace test
         private Bitmap ReSize(string file, int w)
         {
             Bitmap img = new Bitmap(file, true);
-            if( w == 0 || img.Width <= w) return img;
-            
-            int h = (int)((double)img.Height / img.Width * w);
-            Bitmap newimg = new Bitmap(img, w, h);
-            
+            Bitmap newimg;
+            if( w == 0 || img.Width <= w)
+            {
+                newimg = new Bitmap(img);
+            } else {
+                int h = (int)((double)img.Height / img.Width * w);
+                newimg = new Bitmap(img, w, h);
+            }
             img.Dispose();
             return newimg;
         }
-        
-        //输出结果
-        private void result()
-        {
-            Console.WriteLine(
-                "Success: "+SuccessCount.ToString() +
-                "\tError: "+ErrorCount.ToString());
-        }
+
     }
 }
