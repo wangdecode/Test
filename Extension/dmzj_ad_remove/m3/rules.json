@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "priority": 1,
+        "condition": {
+            "regexFilter": ".dmzj.com/js/ad*",
+            "resourceTypes": [ "script" ]
+        },
+        "action": { "type": "block" }
+    },
+    {
+        "id": 2,
+        "priority": 2,
+        "condition": {
+            "regexFilter": ".dmzj.com/css/share/share_css.css",
+            "resourceTypes": [ "stylesheet" ]
+        },
+        "action": { "type": "block" }
+    }
+]
