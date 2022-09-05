@@ -22,3 +22,11 @@ function Remove_page(){
         i.getElementsByClassName('inner_img')[t].style='';
     }
 }
+
+function ChangeFont(){
+    let i=document.getElementById("article-main-contents").getElementsByTagName("span");
+    let l=i.length;
+    for(let t=0;t<l;t++){
+        i[t].style.fontFamily = '';
+    }
+}
