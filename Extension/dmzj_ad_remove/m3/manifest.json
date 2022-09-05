@@ -1,0 +1,29 @@
+{
+    "name": "dmzj",
+    "version": "1.0",
+    "manifest_version": 3,
+
+    "description": "dmzj扩展",
+    "icons": {
+        "16": "icon.png"
+    },
+    //"background": {
+    //    "service_worker": "background.js"
+    //},
+    "host_permissions": [
+        "*://*.dmzj.com/",
+        "*://*.dmzj1.com/"
+    ],
+    "permissions": [
+        "declarativeNetRequest"
+    ],
+    "declarative_net_request": {
+        "rule_resources" : [
+            {
+            "id": "ruleset_1",
+            "enabled": true,
+            "path": "rules.json"
+            }
+        ]
+    }
+}
