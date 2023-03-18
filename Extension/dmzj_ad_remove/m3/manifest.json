@@ -12,7 +12,7 @@
     //},
     "host_permissions": [
         "*://*.dmzj.com/",
-        "*://*.dmzj1.com/"
+        "*://*.idmzj.com/"
     ],
     "permissions": [
         "declarativeNetRequest"
