@@ -1,4 +1,4 @@
-﻿{
+{
     "name": "dmzj",
     "version": "1.0",
     "manifest_version": 2,
@@ -21,6 +21,7 @@
     "permissions": [
         "webRequest", "webRequestBlocking",
         "*://*.dmzj.com/",
-        "*://*.dmzj1.com/"
+        "*://*.dmzj1.com/",
+        "*://*.idmzj.com/"
     ]
 }
