@@ -6,8 +6,8 @@ chrome.webRequest.onBeforeRequest.addListener(
     {
         urls:["*://*.dmzj.com/js/ad*",
               "*://*.dmzj.com/css/share/share_css.css",
-              "*://*.dmzj1.com/js/ad*",
-              "*://*.dmzj1.com/css/share/share_css.css"],
+              "*://*.idmzj.com/js/ad*",
+              "*://*.idmzj.com/css/share/share_css.css"],
         types: ["script", "stylesheet"]
     },
     ["blocking"]
