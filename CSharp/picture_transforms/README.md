@@ -9,7 +9,11 @@ Release: csc.exe PicTransform.cs ProgressBar.cs<br>
 可以手动添加一个同名的配置文件(.ini)，在配置文件中修改配置<br>
 <br>
 usage: [exe] paths <br><br>
-
+ReSizeWidth : 0 表示不调整图片大小，当值大于0时，调整图片宽度为此值并比例缩放<br>
+ImageFormat : 支持转换后的图片格式<br>
+JpgQuality  : 当 ImageFormat 为 jpg 时，用于设置转换 jpg 的质量（范围0－100），数值越大文件体积越大，质量相对也越高<br>
+IsNewFile   : true 表示创建一个新的文件夹存放原图。false 表示直接覆盖原文件。<br>
+<br><br>
 ReSizeWidth : only resize image while Width > 0<br>
 ImageFormat : jpg、png、bmp、tiff、gif<br>
 JpgQuality  : 0-100<br>
