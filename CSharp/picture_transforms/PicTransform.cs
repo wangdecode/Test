@@ -67,6 +67,20 @@ namespace test
                 return true;
         }
 
+        //判断是否为图片文件，是返回true
+        /* public static bool IsPictureFile(string file)
+        {
+            string ext = file.Substring(file.LastIndexOf('\\') + 1);
+            int index = ext.LastIndexOf('.');
+            if(index != -1){
+                ext = ext.Substring(index + 1);
+                if(ext == "jpg" || ext == "png" ||
+                   ext == "bmp" || ext == "tiff" || ext == "gif")
+                    return true;
+            }
+            return false;
+        } */
+        
     }
     
     //图片转换类
