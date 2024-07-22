@@ -53,3 +53,98 @@ File list:
 └─OFFICE12
         MSO.DLL
         
+
+============================================================
+        Install bat
+============================================================
+@echo off
+color 0a
+echo *特别注意：
+echo 1、系统语言必须是简体中文，否则将无法完全安装。
+echo 2、安装组件前请手动关闭所有OFFICE相关文件和程序。（包括PPT,EXCEL,WORD等调用OFFICE组件的程序！）否则将导致安装不完全！*
+echo *该组件为微软官方OFFICE的扩展组件，不会威胁本机原有OFFICE或其他软件的稳定性，请放心安装！*
+pause
+
+rem ------------get target folder------------
+set regpath0=%CommonProgramFiles%
+if not "%CommonProgramFiles(x86)%"=="" set regpath0=%CommonProgramFiles(x86)%
+set regpath0=%regpath0:\=\\%
+set regpath0=%regpath0%\\Microsoft Shared\\
+
+rem ------------make reg file------------
+
+echo Windows Registry Editor Version 5.00>modi.reg
+echo.>>modi.reg
+echo [HKEY_CLASSES_ROOT\Installer\Components\61BA386016BD0C340BBEAC273D84FD5F]>>modi.reg
+echo "2052"=hex(7):76,00,55,00,70,00,41,00,56,00,53,00,2e,00,7d,00,58,00,25,00,21,\>>modi.reg
+echo   00,21,00,21,00,21,00,21,00,4d,00,4b,00,4b,00,53,00,6b,00,4f,00,43,00,52,00,\>>modi.reg
+echo   5f,00,32,00,30,00,35,00,32,00,3c,00,00,00,00,00>>modi.reg
+echo.>>modi.reg
+echo [HKEY_CLASSES_ROOT\Installer\Features\00002109F10040800000000000F01FEC]>>modi.reg
+echo "OCR_2052"="">>modi.reg
+echo.>>modi.reg
+echo [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Products\00002109F10040800000000000F01FEC\Features]>>modi.reg
+echo "OCR_2052"="%%mEMae,7q9*DXdU@EPi=">>modi.reg
+echo.>>modi.reg
+echo [HKEY_CLASSES_ROOT\Installer\Products\00002109710000000000000000F01FEC]>>modi.reg
+echo.>>modi.reg
+echo [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Components\3F745FF6A76FF2F4797DB74FC7B3FD8B]>>modi.reg
+echo "00002109710000000000000000F01FEC"="%regpath0%MODI\\12.0\\XPAGE3C.DLL">>modi.reg
+echo.>>modi.reg
+echo [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Components\4080B9FA1A0BBF34FB7813E87159FC64]>>modi.reg
+echo "00002109F10040800000000000F01FEC"="%regpath0%MODI\\12.0\\SCCODE.UNI">>modi.reg
+echo.>>modi.reg
+echo [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Components\48AD0082D02B3D24C9A56FA50728CCAB]>>modi.reg
+echo "00002109710000000000000000F01FEC"="%regpath0%MODI\\12.0\\MSPCORE.DLL">>modi.reg
+echo.>>modi.reg
+echo [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Components\D94C8360B8BB1DC41B1950E0F8237563]>>modi.reg
+echo "00002109710000000000000000F01FEC"="%regpath0%OFFICE12\\MSO.DLL">>modi.reg
+echo.>>modi.reg
+echo [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Products\00002109710000000000000000F01FEC\InstallProperties]>>modi.reg
+echo "WindowsInstaller"=dword:00000001>>modi.reg
+
+rem ------------import reg file------------
+reg import modi.reg
+reg import ricogn.reg
+del modi.reg
+
+rem ------------get target folder------------
+set regpath0=%CommonProgramFiles%
+if not "%CommonProgramFiles(x86)%"=="" set regpath0=%CommonProgramFiles(x86)%
+set regpath0=%regpath0%\Microsoft Shared
+
+rem ------------copy files to target folder------------
+xcopy MODI\*.* "%regpath0%"\MODI\ /s /y
+xcopy OFFICE12\*.* "%regpath0%"\OFFICE12\ /s /y
+
+rem ------------register controls------------
+set regpath1=%regpath0%\MODI\12.0\
+regsvr32 "%regpath1%MDIVWCTL.DLL"
+regsvr32 "%regpath1%MSPCORE.DLL"
+
+rem ------------clear environment------------
+set regpath0=
+set regpath1=
+
+
+============================================================
+        Uninstall bat
+============================================================
+@echo off
+reg delete "HKEY_CLASSES_ROOT\Installer\Components\61BA386016BD0C340BBEAC273D84FD5F" /f
+reg delete "HKEY_CLASSES_ROOT\Installer\Features\00002109F10040800000000000F01FEC" /f
+reg delete "HKEY_CLASSES_ROOT\Installer\Products\00002109710000000000000000F01FEC" /f
+reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Products\00002109F10040800000000000F01FEC\Features" /f
+reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Components\3F745FF6A76FF2F4797DB74FC7B3FD8B" /f
+reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Components\4080B9FA1A0BBF34FB7813E87159FC64" /f
+reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Components\48AD0082D02B3D24C9A56FA50728CCAB" /f
+reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Components\D94C8360B8BB1DC41B1950E0F8237563" /f
+reg delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Products\00002109710000000000000000F01FEC\InstallProperties" /f
+
+set regpath0=%CommonProgramFiles%\Microsoft Shared\MODI\12.0
+rem set regpath1=%CommonProgramFiles(x86)%\Microsoft Shared\MODI\12.0
+regsvr32 /u /s "%regpath0%\MDIVWCTL.DLL"
+regsvr32 /u /s "%regpath0%\MSPCORE.DLL"
+
+choice /t 3 /d y>nul
+
