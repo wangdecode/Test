@@ -1,0 +1,55 @@
+File list:
+©¦
+©À©¤MODI
+©¦  ©¸©¤12.0
+©¦          BINDER.DLL
+©¦          CharSetTable.chr
+©¦          ENGDIC.DAT
+©¦          ENGIDX.DAT
+©¦          ENGLISH.LNG
+©¦          FORM.DLL
+©¦          JFONT.DAT
+©¦          JPCODE.UNI
+©¦          JPPRINT.DAT
+©¦          JPPRINT2.DAT
+©¦          JPSERHT.DAT
+©¦          JPTREE.DAT
+©¦          LATIN1.SHP
+©¦          LOOKUP.DAT
+©¦          MDIVWCTL.DLL
+©¦          MSPCORE.DLL
+©¦          MSPGIMME.DLL
+©¦          OCRHC.DAT
+©¦          OCRVC.DAT
+©¦          PSOM.DLL
+©¦          REVERSE.DLL
+©¦          SCCODE.UNI
+©¦          SCPRINT.DAT
+©¦          SCPRINT2.DAT
+©¦          SCSERHT.DAT
+©¦          SCTREE.DAT
+©¦          THOCR.PSP
+©¦          THOCRAPI.DLL
+©¦          TWCUTCHR.DLL
+©¦          TWCUTLIN.DLL
+©¦          TWGB32.DLL
+©¦          TWLAY32.DLL
+©¦          TWORIENT.DLL
+©¦          TWRECC.DLL
+©¦          TWRECE.DLL
+©¦          TWRECJ.DLL
+©¦          TWRECS.DLL
+©¦          TWSJIS32.DLL
+©¦          TWSTRUCT.DLL
+©¦          TW_GU.DAT
+©¦          TW_SU.DAT
+©¦          TW_UG.DAT
+©¦          TW_US.DAT
+©¦          XFILE.PSP
+©¦          XIMAGE3B.DLL
+©¦          XOCR3.PSP
+©¦          XPAGE3C.DLL
+©¦          
+©¸©¤OFFICE12
+        MSO.DLL
+        
