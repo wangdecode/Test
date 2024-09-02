@@ -27,7 +27,7 @@ if __name__ == "__main__":
         pos = filein.read(1024 * 1024 * 50).find(b'\x70\x66\x36')
     # 跳过文件头
     filein.seek(pos + 3)
-    # 4 byte
+    # 跳过 4 Byte
     filein.seek(4, 1)
     # 读取文件数量
     file_num = int(binascii.b2a_hex( filein.read(4)[::-1] ), 16)
