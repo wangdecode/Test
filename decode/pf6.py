@@ -11,9 +11,21 @@ if __name__ == "__main__":
     # filein_name = r'test.pfs'
     filein_name = input('请输入文件：')
     
-    filein = open(filein_name, 'rb')
-    # 跳过文件头 'pf6'
-    pos = filein.read().find(b'\x70\x66\x36')
+    filein = open(filein_name.replace('\"',''), 'rb')
+    # 读取文件头
+    filehead = filein.read(4)
+    # 判断是否为 'pf' 开头
+    if filehead[0:2] == b'\x70\x66':
+        print('文件头：' + filehead[0:3].decode('latin-1'))
+        ver = int(binascii.b2a_hex( filehead[2:3] ), 16)
+        # 第三位不是 0-9
+        if ver < 48 or ver > 57:
+            exit()
+        pos = 0
+    # 判断是否为可执行文件，若是读取前 50 MB
+    elif filehead[0:2] == b'\x4D\x5A':
+        pos = filein.read(1024 * 1024 * 50).find(b'\x70\x66\x36')
+    # 跳过文件头
     filein.seek(pos + 3)
     # 4 byte
     filein.seek(4, 1)
