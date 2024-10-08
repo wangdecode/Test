@@ -67,7 +67,7 @@ def dl_text(data, name):
 
 
 if __name__ == "__main__":
-    url = ''
+    url = ''  # TODO
     dl_urls(url)
     print('finish.')
     
