@@ -7,7 +7,7 @@ Release: csc.exe PicTransform.cs ProgressBar.cs
 
 ## 用法
 把一个或多个文件夹拖到程序上  
-可以手动添加一个同名的配置文件(.txt)，在配置文件中修改配置  
+可以手动新建一个和程序同名的配置文件(如 PicTransform.txt)，在配置文件中修改配置  
 
 usage: [exe] paths  
 
@@ -21,7 +21,7 @@ ImageFormat : jpg、png、bmp、tiff、gif
 JpgQuality  : 0-100  
 IsNewFile   : if true will make a new folder  
 
-### Sample config file ( [exe].txt ):  
+### Sample config file:  
 ReSizeWidth = 0  
 ImageFormat = jpg  
 JpgQuality  = 90  
