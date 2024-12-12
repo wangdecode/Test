@@ -94,11 +94,13 @@ namespace test
         long quality = 90;
         int width = 0;
         bool IsNewFile = false;
+        bool IsWebp = false; // 标记是否启用 webp
         
         public Picture()
         {
             ReadConfig();
             PrintIni();
+            IsWebp = WebP.CheckFileExists(); //判断是否启用 webp 并记录
         }
         
         public void PrintIni()
@@ -210,12 +212,13 @@ namespace test
             try
             {
                 string f_ext = file_old.Substring(file_old.LastIndexOf('.') + 1);
-                Bitmap img;
+                Bitmap img = null;
                 
                 // 判断是否为 webp
-                if(f_ext.ToLower() == "webp" && WebP.CheckFileExists())
+                if(f_ext.ToLower() == "webp")
                 {
-                    if(!WebP.Load(file_old, out img)) return;
+                    if(!IsWebp) return;
+                    WebP.Load(file_old, out img);
                 }else{
                     img = new Bitmap(file_old, true);
                 }
