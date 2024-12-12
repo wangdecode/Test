@@ -58,18 +58,14 @@ namespace WebPMethod
 
                 // 创建 Bitmap 数据并锁定和写入
                 bmp = new Bitmap(imgWidth, imgHeight, PixelFormat.Format24bppRgb);
-                BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), 
-
-ImageLockMode.WriteOnly, bmp.PixelFormat);
+                BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.WriteOnly, bmp.PixelFormat);
 
                 // 为解压图片分配内存空间
                 outputBufferSize = bmpData.Stride * imgHeight;
                 outputBuffer = Marshal.AllocHGlobal(outputBufferSize);
 
                 // 解压图片
-                outputBuffer = WebPDecodeBGRInto(ptrData, dataSize, outputBuffer, outputBufferSize, 
-
-bmpData.Stride);
+                outputBuffer = WebPDecodeBGRInto(ptrData, dataSize, outputBuffer, outputBufferSize, bmpData.Stride);
 
                 // 使用 Marshal 写入 bitmap 数据
                 //byte[] buffer = new byte[outputBufferSize];
@@ -94,9 +90,7 @@ bmpData.Stride);
             catch (Exception e) { Console.WriteLine(e); return false; }
         }
 
-        // 验证 WebP 图片标头并检索图片宽度和高度，如果格式正确则 *width 和 *height 指针返回对应宽和高，
-
-否则返回 NULL
+        // 验证 WebP 图片标头并检索图片宽度和高度，如果格式正确则 *width 和 *height 指针返回对应宽和高，否则返回 NULL
         // 输入：data，指向 WebP 图片数据的指针
         // 输入：data_size，data 指向的内存块大小
         // 输入：width ，宽度，范围为 1-16383.
@@ -113,9 +107,7 @@ bmpData.Stride);
         // 输入：output_stride，扫描线间的距离
         // 返回：成功返回 output_buffer ，否则返回 NULL
         [DllImport("libwebp.dll")]
-        static extern IntPtr WebPDecodeBGRInto(IntPtr data, UInt32 data_size, IntPtr output_buffer, int 
-
-output_buffer_size, int output_stride);
+        static extern IntPtr WebPDecodeBGRInto(IntPtr data, UInt32 data_size, IntPtr output_buffer, int output_buffer_size, int output_stride);
 
         // CopyMemory方法
         [DllImport("kernel32.dll")]
