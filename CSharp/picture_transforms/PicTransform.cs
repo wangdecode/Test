@@ -96,7 +96,7 @@ namespace test
         
         public Picture()
         {
-            ReadIni();
+            ReadConfig();
             PrintIni();
         }
         
@@ -109,10 +109,10 @@ namespace test
         }
         
         //读取配置文件
-        public void ReadIni()
+        public void ReadConfig()
         {
             string file = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
-            file = file.Substring(0,file.LastIndexOf('.') + 1) + "ini";
+            file = file.Substring(0,file.LastIndexOf('.') + 1) + "txt";
             
             FileInfo fileinfo = new FileInfo(file);
             if (!fileinfo.Exists || fileinfo.Length > 4096) return;
