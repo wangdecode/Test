@@ -208,7 +208,10 @@ namespace test
             Bitmap image;
             try
             {
-                image = ReSize(file_old, width);
+                Bitmap img;
+                img = new Bitmap(file_old, true);
+                image = ReSize(img, width);
+                img.Dispose();
             } catch (System.ArgumentException e)
             {
                 Console.WriteLine(file_old + "\n" + e);
@@ -254,9 +257,8 @@ namespace test
         }
         
         //图片缩放，按宽等比缩放
-        private Bitmap ReSize(string file, int w)
+        private Bitmap ReSize(Bitmap img, int w)
         {
-            Bitmap img = new Bitmap(file, true);
             Bitmap newimg;
             if( w == 0 || img.Width <= w)
             {
@@ -265,7 +267,6 @@ namespace test
                 int h = (int)((double)img.Height / img.Width * w);
                 newimg = new Bitmap(img, w, h);
             }
-            img.Dispose();
             return newimg;
         }
 
