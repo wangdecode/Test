@@ -75,8 +75,8 @@ namespace test
             int index = ext.LastIndexOf('.');
             if(index != -1){
                 ext = ext.Substring(index + 1);
-                if(ext == "jpg" || ext == "png" ||
-                   ext == "bmp" || ext == "tiff" || ext == "gif")
+                if(ext == "jpg" || ext == "png" || ext == "bmp" ||
+                  ext == "tiff" || ext == "gif" || ext == "webp")
                     return true;
             }
             return false;
