@@ -1,0 +1,29 @@
+# 环境
+# python 3.10、cu121
+
+# 安装 语音转文本 库
+pip install faster-whisper
+
+# 下载 whisper 模型
+# 如large-v2: config.json, model.bin, tokenizer.json, vocabulary.txt
+
+# 下载 sakura 模型
+# sakura-14b-qwen2.5-v1.0-iq4xs.gguf
+
+# 安装 sakura 模型
+pip install -r requirements.txt
+
+# 运行翻译模型
+python ./traslate/server.py --model_name_or_path ./traslate/sakura-14b-qwen2.5-v1.0-iq4xs.gguf --llama_cpp --use_gpu --model_version 0.9 --trust_remote_code --no-auth
+
+# api 调用
+# 安装 fastapi 和 ASGI 服务器
+pip install fastapi uvicorn
+
+# 启动脚本
+# uvicorn [filename]:app --reload
+uvicorn whisper_api:app --reload
+
+# 接口文档地址
+# http://127.0.0.1:8000/docs
+# http://127.0.0.1:8000/redoc
