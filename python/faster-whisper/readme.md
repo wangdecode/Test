@@ -7,9 +7,9 @@
 `whisper_api` 本地 faster-whisper 类，提供语音转文本功能   
 
 ## 最简单的 whisper_api 调用方法
-`
+```python
 from whisper_api import whisper
 
 mywhisper = whisper()
-mywhisper.audio2text('1.mp3')
-`
+result = mywhisper.audio2text('1.mp3')
+```
