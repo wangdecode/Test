@@ -33,3 +33,5 @@ python translate_novel.py --model_name_or_path models\sakura-14b-qwen2.5-v1.0-iq
 # 可以给轻小说机翻机器人使用（https://books.fishhawk.top/）
 # http://127.0.0.1:5000/docs
 python server.py --model_name_or_path models/sakura-14b-qwen2.5-v1.0-iq4xs.gguf --model_version 0.9 --llama_cpp --use_gpu --trust_remote_code --no-auth
+
+
