@@ -7,7 +7,7 @@ mywhisper =  None
 
 @app.get("/")
 def read_root():
-    return {"Info": ""}
+    return {"ver": "0.5"}
 
 
 # @app.get("/id/{input_id}")
@@ -29,7 +29,8 @@ async def get_audio_file(
         - **time**： 语音转换时长
     """
     contents = await file.read()
-    filepath = "./tmp/" + file.filename
+    # 文件名去除特殊字符
+    filepath = "./tmp/" + file.filename.translate(str.maketrans('', '', '@#$%^&*()_+/\\')).replace('..','')
     with open(filepath, "wb") as f:
         f.write(contents)
     
@@ -62,3 +63,4 @@ async def get_audio_file2(request: Request):
 if __name__ == "__main__":
     mywhisper = whisper()
     uvicorn.run(app=app, host="127.0.0.1", port=8000)
+    
