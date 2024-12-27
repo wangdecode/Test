@@ -45,6 +45,15 @@ async def get_audio_file(
 
 @app.post('/audio2text2')
 async def get_audio_file2(request: Request):
+    """
+        上传语音文件并转录为文本
+        - **request.body**： 请求的body中附上音频数据
+        
+        返回结果
+        - **file**： 上传后的文件及路径
+        - **text**： 语音转换后的文本
+        - **time**： 语音转换时长
+    """
     file_data = await request.body()
     
     filepath = "./tmp/tmp"
