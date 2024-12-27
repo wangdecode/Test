@@ -8,7 +8,7 @@ class whisper:
     model = None
 
     # vad 默认参数
-    vad=dict(threshold=0.5,
+    vad=dict(threshold=0.5,   # 歌词可以改小点，如0.1
         min_speech_duration_ms=250,
         max_speech_duration_s=float("inf"),
         min_silence_duration_ms=2000,
