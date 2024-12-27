@@ -25,14 +25,11 @@ class whisper:
             return
 
         start_time = time.time() # 计时开始
-        
-        if lang == "":
-            segments, info = self.model.transcribe(input_file, beam_size=5,
-                vad_filter=True, vad_parameters=self.vad) # 自动判断语言
-            print("Detected language '%s' with probability %f" % (info.language, info.language_probability))
-        else:
-            segments, info = self.model.transcribe(input_file, beam_size=5, language=lang,
-                vad_filter=True, vad_parameters=self.vad)# 指定语言
+
+        # 语音转文字
+        segments, info = self.model.transcribe(input_file, beam_size=5, language=lang,
+            vad_filter=True, vad_parameters=self.vad)
+        print("Detected language '%s' with probability %f" % (info.language, info.language_probability))
 
         # 过滤重复内容
         tmp = ""
@@ -49,5 +46,4 @@ class whisper:
         
         end_time = time.time() # 计时结束
         
-        # print((result, "%.2f" % (end_time - start_time)))
         return (result, "%.2f" % (end_time - start_time))
