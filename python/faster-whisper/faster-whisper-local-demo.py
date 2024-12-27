@@ -5,7 +5,7 @@ input_file = "1.mp3"
 # input_file = "01.wav"
 output_file = "out.txt"
 
-model_path = "large-v2"
+model_path = "large-v2" # 指定目录，目录下放模型所有文件
 lang = "ja" # zh,ja,en
 
 # vad 默认参数
