@@ -2,7 +2,6 @@ import time
 from faster_whisper import WhisperModel
 
 input_file = "1.mp3"
-# input_file = "01.wav"
 output_file = "out.txt"
 
 model_path = "large-v2" # 指定目录，目录下放模型所有文件
