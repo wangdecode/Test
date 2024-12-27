@@ -7,15 +7,6 @@ pip install faster-whisper
 # 下载 whisper 模型
 # 如large-v2: config.json, model.bin, tokenizer.json, vocabulary.txt
 
-# 下载 sakura 模型
-# sakura-14b-qwen2.5-v1.0-iq4xs.gguf
-
-# 安装 sakura 模型
-pip install -r requirements.txt
-
-# 运行翻译模型
-python ./traslate/server.py --model_name_or_path ./traslate/sakura-14b-qwen2.5-v1.0-iq4xs.gguf --llama_cpp --use_gpu --model_version 0.9 --trust_remote_code --no-auth
-
 # api 调用
 # 安装 fastapi 和 ASGI 服务器
 pip install fastapi uvicorn
@@ -27,3 +18,18 @@ uvicorn whisper_api:app --reload
 # 接口文档地址
 # http://127.0.0.1:8000/docs
 # http://127.0.0.1:8000/redoc
+
+---------------------------------------------
+# 下载 sakura 模型，放到 models 目录下
+# sakura-14b-qwen2.5-v1.0-iq4xs.gguf
+
+# 安装模型组件，下载github完整项目，解压并进入项目主目录
+pip install -r requirements.txt
+
+# 本地翻译文本，需在目录下放 UTF-8 编码的 novel.txt 原文件
+python translate_novel.py --model_name_or_path models\sakura-14b-qwen2.5-v1.0-iq4xs.gguf --model_version 0.9 --llama_cpp --use_gpu --trust_remote_code --text_length 512 --data_path novel.txt --output_path novel_translated.txt
+
+# 运行翻译API后端
+# 可以给轻小说机翻机器人使用（https://books.fishhawk.top/）
+# http://127.0.0.1:5000/docs
+python server.py --model_name_or_path models/sakura-14b-qwen2.5-v1.0-iq4xs.gguf --model_version 0.9 --llama_cpp --use_gpu --trust_remote_code --no-auth
