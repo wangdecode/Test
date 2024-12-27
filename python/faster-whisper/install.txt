@@ -20,6 +20,7 @@ uvicorn whisper_api:app --reload
 # http://127.0.0.1:8000/redoc
 
 ---------------------------------------------
+# 某文本翻译（本地 sakura 模型）
 # 下载 sakura 模型，放到 models 目录下
 # sakura-14b-qwen2.5-v1.0-iq4xs.gguf
 
