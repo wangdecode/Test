@@ -6,6 +6,7 @@ pip install faster-whisper
 
 # 下载 whisper 模型
 # 如large-v2: config.json, model.bin, tokenizer.json, vocabulary.txt
+#   large-v3..
 
 # api 调用
 # 安装 fastapi 和 ASGI 服务器
@@ -34,5 +35,11 @@ python translate_novel.py --model_name_or_path models\sakura-14b-qwen2.5-v1.0-iq
 # 可以给轻小说机翻机器人使用（https://books.fishhawk.top/）
 # http://127.0.0.1:5000/docs
 python server.py --model_name_or_path models/sakura-14b-qwen2.5-v1.0-iq4xs.gguf --model_version 0.9 --llama_cpp --use_gpu --trust_remote_code --no-auth
+
+---------------------------------------------
+# 其它
+Luna翻译器：https://github.com/HIllya51/LunaTranslator
+分离背景音 uvr5
+
 
 
