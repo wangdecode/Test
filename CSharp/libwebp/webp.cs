@@ -13,7 +13,9 @@ namespace WebPMethod
         // 返回：成功返回 True，否则返回 False
         public static bool CheckFileExists()
         {
-            return File.Exists("libwebp.dll");
+            if (File.Exists(System.AppDomain.CurrentDomain.BaseDirectory + "libwebp.dll") && 
+                File.Exists(System.AppDomain.CurrentDomain.BaseDirectory + "libsharpyuv.dll")) return true;
+            return false;
         }
         
         // 保存 bitmap 为 WebP 格式
