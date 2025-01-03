@@ -13,7 +13,7 @@ namespace WebPMethod
         // 返回：成功返回 True，否则返回 False
         public static bool CheckFileExists()
         {
-            if (File.Exists("libwebp.dll") && File.Exists("libsharpyuv.dll")) return true;
+            if (File.Exists(System.AppDomain.CurrentDomain.BaseDirectory + "libwebp.dll") && File.Exists(System.AppDomain.CurrentDomain.BaseDirectory + "libsharpyuv.dll")) return true;
             return false;
         }
 
